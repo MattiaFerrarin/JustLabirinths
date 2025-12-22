@@ -61,5 +61,8 @@ public class MazeRenderer : MonoBehaviour
                 if (!node.WallBack) cell.ClearBackWall();
             }
         }
+
+        _mazeGrid[0, 0].ClearBackWall();
+        _mazeGrid[_mazeWidth - 1, _mazeDepth - 1].ClearFrontWall();
     }
 }
