@@ -9,8 +9,15 @@ public class MazeRenderer : MonoBehaviour
     [SerializeField]
     private MazeCell _mazeCellPrefab;
     [SerializeField]
-    private int _mazeWidth;
+    private GameObject _groundPlane;
     [SerializeField]
+    private GameObject _entrance;
+    [SerializeField]
+    private GameObject _exit;
+    [SerializeField]
+    private GameObject _playerObject;
+
+    private int _mazeWidth;
     private int _mazeDepth;
 
     private float _mazeStepForOriginShiftTimeDelay = 1.0f;
@@ -22,13 +29,26 @@ public class MazeRenderer : MonoBehaviour
 
     private void Start()
     {
-        generator = new OriginShiftMazeGenerator(_mazeWidth, _mazeDepth);
+        _mazeWidth = GameManager.CurrentlySelectedMazeSize.width;
+        _mazeDepth = GameManager.CurrentlySelectedMazeSize.height;
+        _groundPlane.transform.localScale = new Vector3(Mathf.Max(_mazeWidth / 10f, 0.15f) + 0.02f, 1, Mathf.Max(_mazeDepth / 10f, 0.15f) + 0.02f);
+        _groundPlane.transform.position = new Vector3((_mazeWidth-1) / 2f, 0, (_mazeDepth-1) / 2f);
+        _entrance.transform.position = new Vector3(0, -0.001f, -1.6f);
+        _entrance.transform.rotation = Quaternion.Euler(0, 180, 0);
+        _exit.transform.position = new Vector3(_mazeWidth - 1, -0.001f, _mazeDepth - 1 + 1.6f);
+        _exit.transform.rotation = Quaternion.Euler(0, 0, 0);
+        _playerObject.transform.position = new Vector3(0, 0.5f, -0.5f);
+
+        generator = MazeGeneratorFactory.CreateMazeGenerator(GameManager.MazeGeneratorType, _mazeWidth, _mazeDepth);
         MazeNode[,] mazeData = generator.Generate();
 
         _mazeGrid = new MazeCell[_mazeWidth, _mazeDepth];
         UpdateGraphics(mazeData);
 
-        InvokeRepeating(nameof(OriginShiftStep), _mazeStepForOriginShiftTimeDelay, _mazeStepForOriginShiftTimeRate);
+        if(generator is OriginShiftMazeGenerator)
+        {
+            InvokeRepeating(nameof(OriginShiftStep), _mazeStepForOriginShiftTimeDelay, _mazeStepForOriginShiftTimeRate);
+        }
     }
 
     private void OriginShiftStep()

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
@@ -184,7 +185,7 @@ public class OriginShiftMazeGenerator : MazeGenerator
 
     public override MazeNode[,] Generate()
     {
-        for (int i=0; i<width*depth*10; i++)  // Decent number for a pretty random maze
+        for (int i=0; i<width*depth*15; i++)  // Decent number for a pretty random maze
         {
             OriginShift();
         }
@@ -225,5 +226,21 @@ public class OriginShiftMazeGenerator : MazeGenerator
 
         // Update walls
         SetWalls(newRoot, oldRoot, true);
+    }
+}
+
+public static class MazeGeneratorFactory
+{
+    private static readonly Dictionary<Type, Func<int, int, MazeGenerator>> _registry = new()
+    {
+        { typeof(DFSMazeGenerator), (int w, int h) => new DFSMazeGenerator(w,h) },
+        { typeof(OriginShiftMazeGenerator), (int w, int h) => new OriginShiftMazeGenerator(w,h) }
+    };
+
+    public static MazeGenerator CreateMazeGenerator(Type type, int width, int height)
+    {
+        if (_registry.TryGetValue(type, out var creator))
+            return creator(width, height);
+        throw new ArgumentException("Invalid Maze Generator Type");
     }
 }

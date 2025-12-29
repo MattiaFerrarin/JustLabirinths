@@ -22,17 +22,21 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool jumpTriggered;
 
+    public bool IsLocked = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()
     {
+        if (IsLocked) return;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
@@ -50,6 +54,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (IsLocked) return;
+
         isGrounded = Physics.CheckSphere(transform.position + Vector3.down * 0.1f,0.2f,groundLayer);
 
         float x = Input.GetAxis("Horizontal");
