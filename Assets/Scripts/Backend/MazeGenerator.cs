@@ -229,6 +229,93 @@ public class OriginShiftMazeGenerator : MazeGenerator
     }
 }
 
+// Disabled because OriginShift needs a tree structure while DFS generates ignoring the tree structure, would need to make a thing to structure the maze as a tree
+/*public class HybridOriginShiftMazeGenerator : MazeGenerator  // Thought by me
+{
+    private MazeNode origin;
+    public HybridOriginShiftMazeGenerator(int width, int depth) : base()
+    {
+        this.width = width;
+        this.depth = depth;
+
+        grid = new MazeNode[width, depth];
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < depth; y++)
+            {
+                MazeNode node = new MazeNode(x, y);
+                grid[x, y] = node;
+
+                if (x == 0 && y == 0)
+                {
+                    origin = node; // origin
+                    node.Parent = null;
+                    continue;
+                }
+
+                MazeNode parent;
+
+                if (x > 0)
+                    parent = grid[x - 1, y];
+                else
+                    parent = grid[x, y - 1];
+
+                node.Parent = parent;
+                parent.Children.Add(node);
+
+                ClearWalls(parent, node);
+            }
+        }
+    }
+
+    public override MazeNode[,] Generate()
+    {
+        grid = new DFSMazeGenerator(width, depth).Generate();
+        for (int i = 0; i < width * depth * 15; i++)  // Decent number for a pretty random maze
+        {
+            OriginShift();
+        }
+        return grid;
+    }
+
+    public MazeNode[,] Step()
+    {
+        OriginShift();
+        return grid;
+    }
+
+    private void OriginShift()
+    {
+        // 1. Random neighbour of the origin
+        List<MazeNode> neighbors = GetNeighbors(origin);
+        MazeNode next = neighbors[rng.Next(neighbors.Count)];
+
+        // 2. Re-root tree between origin and rand neighbour
+        ReRoot(origin, next);
+
+        // 3. Move origin
+        origin = next;
+    }
+
+    private void ReRoot(MazeNode oldRoot, MazeNode newRoot)
+    {
+        MazeNode oldParent = newRoot.Parent;
+        if (oldParent != null)
+        {
+            oldParent.Children.Remove(newRoot);
+            SetWalls(oldParent, newRoot, false);
+        }
+
+        newRoot.Children.Add(oldRoot);
+        newRoot.Parent = null;
+        oldRoot.Parent = newRoot;
+
+        // Update walls
+        SetWalls(newRoot, oldRoot, true);
+    }
+}*/
+
 public static class MazeGeneratorFactory
 {
     private static readonly Dictionary<Type, Func<int, int, MazeGenerator>> _registry = new()

@@ -10,32 +10,41 @@ public class EscapeMenuHandler : MonoBehaviour
     [SerializeField]
     private GameObject _player;
 
-    private bool active = false;
+    private bool Active = false;
 
     void Start()
     {
         _escapeMenuOverlay.SetActive(false);
-        _levelText.text = GameManager.SelectedLevelIndex == -1 ? "Custom Level" : $"Level {_levelText.text}";
+        _levelText.text = GameManager.SelectedLevelIndex == -1 ? "Custom Level" : $"Level {GameManager.SelectedLevelIndex+1}";
     }
 
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            active = !active;
+            Active = !Active;
         }
 
-        if (active)
+        if (Active)
         {
+            Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            _escapeMenuOverlay.SetActive(true);
             _player.GetComponent<PlayerController>().IsLocked = true;
+            _escapeMenuOverlay.SetActive(true);
         }
         else
         {
-            _escapeMenuOverlay.SetActive(false);
+            Time.timeScale = 1f;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             _player.GetComponent<PlayerController>().IsLocked = false;
+            _escapeMenuOverlay.SetActive(false);
         }
+    }
+
+    public void Deactivate()
+    {
+        Active = false;
     }
 }

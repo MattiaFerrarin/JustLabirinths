@@ -14,7 +14,8 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 5f;
 
     // Mouse look
-    public float mouseSensitivity = 200f;
+    private float mouseSensitivity = 200f;
+    private float fov = 70f;
     public float maxLookAngle = 80f;
 
     private Rigidbody rb;
@@ -32,13 +33,19 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (IsLocked) return;
+        if (IsLocked)
+            return;
+
+        mouseSensitivity = PlayerPrefsHandler.GetOption("MouseSensitivity");
+        fov = PlayerPrefsHandler.GetOption("FOV");
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+        playerCamera.fieldOfView = fov;
 
         transform.Rotate(Vector3.up * mouseX);
 
@@ -54,7 +61,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (IsLocked) return;
+        if (IsLocked)
+            return;
 
         isGrounded = Physics.CheckSphere(transform.position + Vector3.down * 0.1f,0.2f,groundLayer);
 

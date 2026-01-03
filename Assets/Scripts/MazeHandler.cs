@@ -11,4 +11,11 @@ public class MazeHandler : MonoBehaviour
         GameManager.MessageForStartMenuScene = (true, "GoToPlayMenu");
         SceneManager.LoadScene("StartMenu");
     }
+
+    public void OnMazeLeave()
+    {
+        GameManager.SelectedLevelIndex = -1;
+        GameManager.MessageForStartMenuScene = (true, "GoToPlayMenu");
+        SceneManager.LoadScene("StartMenu");
+    }
 }
