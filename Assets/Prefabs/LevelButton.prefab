@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa761b79a3cca64a801ca5f60b3b317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelNumber: 0
+  LevelNumber: 0
   _TMPTextGameObject: {fileID: 4391983982459072131}
 --- !u!1 &4391983982459072131
 GameObject:

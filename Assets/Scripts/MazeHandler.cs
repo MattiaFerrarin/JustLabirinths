@@ -9,6 +9,7 @@ public class MazeHandler : MonoBehaviour
             GameManager.Levels[GameManager.SelectedLevelIndex] = LevelStatus.Completed;
         GameManager.SelectedLevelIndex = -1;
         GameManager.MessageForStartMenuScene = (true, "GoToPlayMenu");
+        PlayerPrefsHandler.SaveLevels();
         SceneManager.LoadScene("StartMenu");
     }
 
@@ -16,6 +17,7 @@ public class MazeHandler : MonoBehaviour
     {
         GameManager.SelectedLevelIndex = -1;
         GameManager.MessageForStartMenuScene = (true, "GoToPlayMenu");
+        PlayerPrefsHandler.SaveLevels();
         SceneManager.LoadScene("StartMenu");
     }
 }

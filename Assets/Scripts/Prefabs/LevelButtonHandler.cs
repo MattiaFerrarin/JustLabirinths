@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class LevelButtonHandler : MonoBehaviour
 {
     public int LevelNumber;
+    public AudioSource ButtonClickAudioSource;
     [SerializeField]
     private GameObject _TMPTextGameObject;
     private LevelStatus levelStatus;
@@ -26,6 +27,7 @@ public class LevelButtonHandler : MonoBehaviour
 
     public void OnLevelButtonPressed()
     {
+        ButtonClickAudioSource.Play();
         if (GameManager.Levels[LevelNumber] == LevelStatus.NotStarted)
         {
             GameManager.Levels[LevelNumber] = LevelStatus.Started;

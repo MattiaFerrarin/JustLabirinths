@@ -18,6 +18,8 @@ public class MainMenuHandler : MonoBehaviour
                     gameObject.SetActive(false);
                     break;
             }
+
+        PlayerPrefsHandler.LoadLevels();
     }
     public void OnExitButtonPressed()
     {
